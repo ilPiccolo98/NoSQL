@@ -1,0 +1,9 @@
+Per usare lo script bisogna installare le librerie:
+pymongo
+neo4j
+tramite i comandi:
+pip install pymongo
+pip install neo4j
+
+Per eseguire lo script bisogna aver installato mongodb e neo4j.
+Bisogna aver caricato anche qualche file csv del dataset
