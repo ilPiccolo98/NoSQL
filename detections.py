@@ -5,7 +5,7 @@ import json
 class Detections:
     def __init__(self, uri):
         self.__client = MongoClient(uri)
-        self.__db = self.__client.locations
+        self.__db = self.__client.detections
         self.__gridfs = gridfs.GridFS(self.__client.gridfs)
 
     def get_Anderlecht_streets(self):
