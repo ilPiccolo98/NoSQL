@@ -9,9 +9,10 @@ class Graph_detections:
     def create_graph(self, dataset, city_name):
         self.__graph.execute_query(queries.delete_graph_query)
         self.__graph.execute_query(queries.create_city_node_query(city_name))
-        street_ids = self.__get_streets(dataset)
-        self.__add_streets_into_graph(street_ids, city_name)
-        self.__add_detections_into_graph(dataset)
+        for item in dataset:
+            if "timestamp" in item:
+                self.__graph.execute_query(queries.create_graph(item["id_street"], item["timestamp"], 
+                                                                item["vehicles"], item["average_speed"], city_name))
 
     def filter_by_min_vehicles(self, min):
         records, summary, keys = self.__graph.execute_query(queries.get_records_filtered_by_min_vehicles(min))
@@ -39,17 +40,3 @@ class Graph_detections:
         
     def close(self):
         self.__graph.close()
-
-    def __add_streets_into_graph(self, street_ids, city_name):
-        for street_id in street_ids:
-            self.__graph.execute_query(queries.create_street_node_query(street_id, city_name))
-
-    def __add_detections_into_graph(self, items):
-        for item in items:
-            self.__graph.execute_query(queries.create_detection_node_query(item["timestamp"], item["vehicles"], item["average_speed"], item["id_street"]))
-
-    def __get_streets(self, dataset):
-        street_ids = set()
-        for item in dataset:
-            street_ids.add(item["id_street"])
-        return street_ids
