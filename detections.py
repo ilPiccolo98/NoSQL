@@ -30,7 +30,7 @@ class Detections:
     
     def get_detections_by_timestamp(self, timestamp, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({ "timestamp": timestamp })
+        return collections.find({ "timestamp": timestamp }).sort("id_street", 1)
     
     def close(self):
         self.__client.close()

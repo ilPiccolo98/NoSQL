@@ -5,7 +5,6 @@ import branca.colormap as cm
 class Traffic_map:
     def __init__(self, geoJson, data, timestamp):
         self.__timestamp = timestamp
-        data = sorted(data, key=self.__sort_by_id_streets)
         streets = self.__get_streets(data)
         geoJsonFiltered = self.__filter_geoJson_by_id_streets(geoJson, streets)
         self.__geoData = gpd.GeoDataFrame.from_features(geoJsonFiltered, geoJsonFiltered["crs"]["properties"]["name"])
