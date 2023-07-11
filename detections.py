@@ -22,7 +22,7 @@ class Detections:
 
     def get_all_detections(self, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({}).sort("timestamp", 1)
+        return collections.find({})
 
     def get_detections_by_id_street(self, id_street, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
