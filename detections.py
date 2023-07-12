@@ -22,15 +22,15 @@ class Detections:
 
     def get_all_detections(self, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({})
+        return collections.find({}, {'_id': False})
 
     def get_detections_by_id_street(self, id_street, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({ "id_street": id_street })
+        return collections.find({ "id_street": id_street }, {'_id': False})
     
     def get_detections_by_timestamp(self, timestamp, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({ "timestamp": timestamp }).sort("id_street", 1)
+        return collections.find({ "timestamp": timestamp }, {'_id': False}).sort("id_street", 1)
     
     def close(self):
         self.__client.close()
