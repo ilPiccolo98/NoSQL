@@ -25,9 +25,6 @@ class Traffic_map:
         colormap_dept.caption = 'Traffic Flow - Timestamp: %s' % self.__timestamp
         colormap_dept.add_to(m)
         m.show_in_browser()
-
-    def __sort_by_id_streets(self, item):
-        return item["id_street"]
     
     def __get_streets(self, items):
         id_streets = []

@@ -1,6 +1,5 @@
 import constants
 from detections import Detections
-from graph_detections import Graph_detections
 import pandas as pd
 import matplotlib.pyplot as plt
 

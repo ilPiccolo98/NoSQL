@@ -13,10 +13,25 @@ DF_and_sum = DF_and.sort_values(by=['timestamp']).groupby(['timestamp']).agg({'v
 DF_and_sum['time'] = pd.to_datetime(DF_and_sum['timestamp']).dt.time
 DF_and_sum['DayOfWeek'] = pd.to_datetime(DF_and_sum['timestamp']).dt.dayofweek
 
-DF_bel_working_ = DF_and_sum[DF_and_sum['DayOfWeek'] < 5]
-DF_bel_saturday_ = DF_and_sum[DF_and_sum['DayOfWeek'] == 5]
-DF_bel_sunday_ = DF_and_sum[DF_and_sum['DayOfWeek'] == 6]
+DF_and_working_ = DF_and_sum[DF_and_sum['DayOfWeek'] < 5]
+DF_and_saturday_ = DF_and_sum[DF_and_sum['DayOfWeek'] == 5]
+DF_and_sunday_ = DF_and_sum[DF_and_sum['DayOfWeek'] == 6]
 
-sns.displot(DF_and_sum['vehicles'], color = 'blue')
+sns.distplot(DF_and_sum['vehicles'], hist=False, kde=True, 
+             bins= 200, color = 'blue',
+             hist_kws={'edgecolor':'black'})
 plt.show()
+sns.distplot(DF_and_working_['vehicles'], hist=False, kde=True, 
+             bins= 200, color = 'blue',
+             hist_kws={'edgecolor':'black'})
+plt.show()
+sns.distplot(DF_and_saturday_['vehicles'], hist=False, kde=True, 
+             bins= 200, color = 'blue',
+             hist_kws={'edgecolor':'black'})
+plt.show()
+sns.distplot(DF_and_sunday_['vehicles'], hist=False, kde=True, 
+             bins= 200, color = 'blue',
+             hist_kws={'edgecolor':'black'})
+plt.show()
+
 anderlecht_streets.close()
