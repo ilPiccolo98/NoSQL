@@ -37,7 +37,7 @@ plt.show()
 start = datetime.strptime('03:00:00', '%H:%M:%S').time()
 end = datetime.strptime('15:00:00', '%H:%M:%S').time()
 
-DF_bel_working_day = data_frame_working_[data_frame_working_['time'].between(start, end)]
+data_frame_working_day = data_frame_working_[data_frame_working_['time'].between(start, end)]
 
 
 start = datetime.strptime('15:00:00', '%H:%M:%S').time()
@@ -45,21 +45,20 @@ middle_1 = datetime.strptime('23:59:00', '%H:%M:%S').time()
 middle_2 = datetime.strptime('00:00:00', '%H:%M:%S').time()
 end = datetime.strptime('02:59:00', '%H:%M:%S').time()
 
-DF_bel_working_night_1 = data_frame_working_[data_frame_working_['time'].between(start, middle_1)]
-DF_bel_working_night_2 = data_frame_working_[data_frame_working_['time'].between(middle_2, end)]
+data_frame_working_night_1 = data_frame_working_[data_frame_working_['time'].between(start, middle_1)]
+data_frame_working_night_2 = data_frame_working_[data_frame_working_['time'].between(middle_2, end)]
 
-DF_bel_working_night = pd.concat([DF_bel_working_night_1, DF_bel_working_night_2], axis=0)
+data_frame_working_night = pd.concat([data_frame_working_night_1, data_frame_working_night_2], axis=0)
 
-sns.distplot(DF_bel_working_day['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_working_day['vehicles'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
 
 
-sns.distplot(DF_bel_working_night['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_working_night['vehicles'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-
 
 mongodb_driver.close()
