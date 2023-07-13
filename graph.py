@@ -9,39 +9,39 @@ class Graph:
         self.__driver.execute_query(queries.delete_graph_query)
 
     def execute_graph_creation(self, mongodb_cursor, city_name):
-        list_od_records = []
-        self.remove_old_graph()
+        self.__driver.execute_query(queries.create_city_node, city_name=city_name)
+        list_of_records = []
         for item in mongodb_cursor:
-            if len(list_od_records) == 10000:
-                self.__driver.execute_query(queries.create_graph_query, dataset=list_od_records, city_name=city_name)
-                list_od_records.clear()
+            if len(list_of_records) == 10000:
+                self.__driver.execute_query(queries.create_graph_query, dataset=list_of_records, city_name=city_name)
+                list_of_records.clear()
             else:
-                list_od_records.append(item)
-        self.__driver.execute_query(queries.create_graph_query, dataset=list_od_records, city_name=city_name)
-        list_od_records.clear()
+                list_of_records.append(item)
+        self.__driver.execute_query(queries.create_graph_query, dataset=list_of_records, city_name=city_name)
+        list_of_records.clear()
 
-    def filter_by_min_vehicles(self, min):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_vehicles, min_vehicles=min)
+    def filter_by_min_vehicles(self, min, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_vehicles, min_vehicles=min, city_name=city_name)
         return records, summary, keys
     
-    def filter_by_max_vehicles(self, max):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_vehicles, max_vehicles=max)
+    def filter_by_max_vehicles(self, max, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_vehicles, max_vehicles=max, city_name=city_name)
         return records, summary, keys
     
-    def filter_by_min_and_max_vehicles(self, min, max):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_vehicles, max_vehicles=max, min_vehicles=min)
+    def filter_by_min_and_max_vehicles(self, min, max, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_vehicles, max_vehicles=max, min_vehicles=min, city_name=city_name)
         return records, summary, keys
     
-    def filter_by_min_average_speed(self, min):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_average_speed, min_average_speed=min)
+    def filter_by_min_average_speed(self, min, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_average_speed, min_average_speed=min, city_name=city_name)
         return records, summary, keys
     
-    def filter_by_max_average_speed(self, max):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_average_speed, max_average_speed=max)
+    def filter_by_max_average_speed(self, max, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_average_speed, max_average_speed=max, city_name=city_name)
         return records, summary, keys
     
-    def filter_by_min_and_max_average_speed(self, min, max):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_and_max_average_speed, min_average_speed=min, max_average_speed=max)
+    def filter_by_min_and_max_average_speed(self, min, max, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_and_max_average_speed, min_average_speed=min, max_average_speed=max, city_name=city_name)
         return records, summary, keys
 
     def close(self):

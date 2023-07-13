@@ -30,7 +30,22 @@ class Detections:
     
     def get_detections_by_timestamp(self, timestamp, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({ "timestamp": timestamp }, {'_id': False}).sort("id_street", 1)
+        return collections.find({ "timestamp": timestamp }, {'_id': False})
     
+    def get_number_of_streets_anderlecht(self):
+        data = self.__gridfs.find({ "filename": "Anderlecht_streets.json" }).next().read()
+        geoJson = json.loads(data)
+        return len(geoJson["features"])
+
+    def get_number_of_streets_bruxelles(self):
+        data = self.__gridfs.find({ "filename": "Bruxelles_streets.json" }).next().read()
+        geoJson = json.loads(data)
+        return len(geoJson["features"])
+    
+    def get_number_of_streets_belgium(self):
+        data = self.__gridfs.find({ "filename": "Belgium_streets.json" }).next().read()
+        geoJson = json.loads(data)
+        return len(geoJson["features"])
+
     def close(self):
         self.__client.close()
