@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 
 anderlecht_streets = Detections("mongodb://localhost:27017")
-items = list(anderlecht_streets.get_all_detections(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
-DF_and = pd.DataFrame.from_records(items)
-DF_and.sort_values(by=['timestamp']).groupby(['timestamp']).agg({'vehicles':'sum'}).plot(figsize=(20,5), color = 'red', rot=45, title='Anderlecht')
+items = list(anderlecht_streets.get_all_detections_group_by_timestamp_sum_vehicles(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
+DF_and = pd.DataFrame.from_records(items).set_index(["_id"])
+DF_and.plot(figsize=(20,5), color = 'red', rot=45, title='Anderlecht')
 plt.show()
 anderlecht_streets.close()
