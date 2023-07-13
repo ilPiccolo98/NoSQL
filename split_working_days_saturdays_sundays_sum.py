@@ -5,31 +5,31 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-anderlecht_streets = Detections("mongodb://localhost:27017")
-items = list(anderlecht_streets.get_all_detections_group_by_timestamp_sum_vehicles(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
-DF_and = pd.DataFrame.from_records(items)
+mongodb_driver = Detections("mongodb://localhost:27017")
+items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_vehicles(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
+data_frame = pd.DataFrame.from_records(items)
 
 
-DF_and['time'] = pd.to_datetime(DF_and['_id']).dt.time
-DF_and['DayOfWeek'] = pd.to_datetime(DF_and['_id']).dt.dayofweek
+data_frame['time'] = pd.to_datetime(data_frame['_id']).dt.time
+data_frame['DayOfWeek'] = pd.to_datetime(data_frame['_id']).dt.dayofweek
 
-DF_and_working_ = DF_and[DF_and['DayOfWeek'] < 5]
-DF_and_saturday_ = DF_and[DF_and['DayOfWeek'] == 5]
-DF_and_sunday_ = DF_and[DF_and['DayOfWeek'] == 6]
+data_frame_working_ = data_frame[data_frame['DayOfWeek'] < 5]
+data_frame_saturday_ = data_frame[data_frame['DayOfWeek'] == 5]
+data_frame_sunday_ = data_frame[data_frame['DayOfWeek'] == 6]
 
-sns.distplot(DF_and['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame['vehicles'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-sns.distplot(DF_and_working_['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_working_['vehicles'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-sns.distplot(DF_and_saturday_['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_saturday_['vehicles'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-sns.distplot(DF_and_sunday_['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_sunday_['vehicles'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
@@ -37,7 +37,7 @@ plt.show()
 start = datetime.strptime('03:00:00', '%H:%M:%S').time()
 end = datetime.strptime('15:00:00', '%H:%M:%S').time()
 
-DF_bel_working_day = DF_and_working_[DF_and_working_['time'].between(start, end)]
+DF_bel_working_day = data_frame_working_[data_frame_working_['time'].between(start, end)]
 
 
 start = datetime.strptime('15:00:00', '%H:%M:%S').time()
@@ -45,8 +45,8 @@ middle_1 = datetime.strptime('23:59:00', '%H:%M:%S').time()
 middle_2 = datetime.strptime('00:00:00', '%H:%M:%S').time()
 end = datetime.strptime('02:59:00', '%H:%M:%S').time()
 
-DF_bel_working_night_1 = DF_and_working_[DF_and_working_['time'].between(start, middle_1)]
-DF_bel_working_night_2 = DF_and_working_[DF_and_working_['time'].between(middle_2, end)]
+DF_bel_working_night_1 = data_frame_working_[data_frame_working_['time'].between(start, middle_1)]
+DF_bel_working_night_2 = data_frame_working_[data_frame_working_['time'].between(middle_2, end)]
 
 DF_bel_working_night = pd.concat([DF_bel_working_night_1, DF_bel_working_night_2], axis=0)
 
@@ -62,4 +62,4 @@ sns.distplot(DF_bel_working_night['vehicles'], hist=False, kde=True,
 plt.show()
 
 
-anderlecht_streets.close()
+mongodb_driver.close()
