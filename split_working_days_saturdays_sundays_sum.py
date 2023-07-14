@@ -61,4 +61,31 @@ sns.distplot(data_frame_working_night['vehicles'], hist=False, kde=True,
              hist_kws={'edgecolor':'black'})
 plt.show()
 
+
+data_frame_working = data_frame_working_.groupby('time').agg({'vehicles':['mean']})
+data_frame_working.columns = ['mean']
+ax = data_frame_working[['mean']].plot(color="orange", title = 'avg working days daily pattern')
+plt.show()
+
+
+data_frame_saturday = data_frame_saturday_.groupby('time').agg({'vehicles':['mean']})
+data_frame_saturday.columns = ['mean']
+ax = data_frame_saturday[['mean']].plot(color="orange", title = 'avg saturdays daily pattern')
+plt.show()
+
+
+data_frame_sunday = data_frame_sunday_.groupby('time').agg({'vehicles':['mean']})
+data_frame_sunday.columns = ['mean']
+ax = data_frame_sunday[['mean']].plot(color="orange", title = 'avg sundays daily pattern')
+plt.show()
+
+
+data_frame_working['avg working days'] = data_frame_working[['mean']]
+data_frame_saturday['avg saturdays'] = data_frame_saturday[['mean']]
+data_frame_sunday['avg sunday'] = data_frame_sunday[['mean']]
+ax = data_frame_working[['avg working days']].plot(color="red", title = 'avg  day pattern')
+data_frame_saturday[['avg saturdays']].plot(ax=ax, color="green")
+data_frame_sunday[['avg sunday']].plot(ax=ax, color="blue")
+plt.show()
+
 mongodb_driver.close()
