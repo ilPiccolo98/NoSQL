@@ -20,28 +20,10 @@ class Graph:
         self.__driver.execute_query(queries.create_graph_query, dataset=list_of_records, city_name=city_name)
         list_of_records.clear()
 
-    def filter_by_min_vehicles(self, min, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_vehicles, min_vehicles=min, city_name=city_name)
-        return records, summary, keys
-    
-    def filter_by_max_vehicles(self, max, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_vehicles, max_vehicles=max, city_name=city_name)
-        return records, summary, keys
-    
-    def filter_by_min_and_max_vehicles(self, min, max, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_vehicles, max_vehicles=max, min_vehicles=min, city_name=city_name)
-        return records, summary, keys
-    
-    def filter_by_min_average_speed(self, min, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_average_speed, min_average_speed=min, city_name=city_name)
-        return records, summary, keys
-    
-    def filter_by_max_average_speed(self, max, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_max_average_speed, max_average_speed=max, city_name=city_name)
-        return records, summary, keys
-    
-    def filter_by_min_and_max_average_speed(self, min, max, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_min_and_max_average_speed, min_average_speed=min, max_average_speed=max, city_name=city_name)
+    def filter_records(self, min_vehicles, max_vehicles, min_average_speed, max_average_speed, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records, min_vehicles=min_vehicles, 
+                                                             max_vehicles=max_vehicles, min_average_speed=min_average_speed, 
+                                                             max_average_speed=max_average_speed, city_name=city_name)
         return records, summary, keys
 
     def close(self):
