@@ -12,10 +12,31 @@ create_graph_query = '''  WITH $dataset AS batch
                           CREATE (street) -[r_street:DETECTED {timestamp: node.timestamp}]-> (detection)
                         '''
 
-filter_records = '''MATCH (city:CITY)
-                    WHERE city.name = $city_name
-                    MATCH (street:STREET) -[r:DETECTED]-> (detection:DETECTION)
-                    WHERE detection.vehicles >= $min_vehicles and detection.vehicles <= $max_vehicles and
-                          detection.average_speed >= $min_average_speed and detection.average_speed <= $max_average_speed
-                    return r.timestamp as timestamp, detection.vehicles as vehicles, detection.average_speed as average_speed, street.id_street as id_street
-                  '''
+filter_records_by_vehicles_and_speed = '''MATCH (city:CITY)
+                                          WHERE city.name = $city_name
+                                          MATCH (city:CITY) -[r_has:HAS]-> (street:STREET)
+                                          MATCH (street:STREET) -[r_detected:DETECTED]-> (detection:DETECTION)
+                                          WHERE detection.vehicles >= $min_vehicles and detection.vehicles <= $max_vehicles and
+                                                detection.average_speed >= $min_average_speed and detection.average_speed <= $max_average_speed
+                                          return r_detected.timestamp as timestamp, detection.vehicles as vehicles, detection.average_speed as average_speed, street.id_street as id_street
+                                        '''
+
+vehicles_filtered_by_timestamp_specific_street = '''MATCH (city:CITY)
+                                                    WHERE city.name = $city_name
+                                                    MATCH (city) -[r_has:HAS]-> (street:STREET)
+                                                    MATCH (street) -[r_detected:DETECTED]-> (detection:DETECTION)
+                                                    WHERE r_detected.timestamp >= $min_timestamp and 
+                                                    r_detected.timestamp <= $max_timestamp
+                                                    return r_detected.timestamp as timestamp, detection.vehicles as vehicles
+                                                    order by r_detected.timestamp
+                                                    '''
+
+average_speed_filtered_by_timestamp_specific_street = '''MATCH (city:CITY)
+                                                         WHERE city.name = $city_name
+                                                         MATCH (city) -[r_has:HAS]-> (street:STREET)
+                                                         MATCH (street) -[r_detected:DETECTED]-> (detection:DETECTION)
+                                                         WHERE r_detected.timestamp >= $min_timestamp and 
+                                                         r_detected.timestamp <= $max_timestamp
+                                                         return r_detected.timestamp as timestamp, detection.average_speed as average_speed
+                                                         order by r_detected.timestamp
+                                                        '''

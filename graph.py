@@ -20,10 +20,20 @@ class Graph:
         self.__driver.execute_query(queries.create_graph_query, dataset=list_of_records, city_name=city_name)
         list_of_records.clear()
 
-    def filter_records(self, min_vehicles, max_vehicles, min_average_speed, max_average_speed, city_name):
-        records, summary, keys = self.__driver.execute_query(queries.filter_records, min_vehicles=min_vehicles, 
+    def filter_records_by_vehicles_and_speed(self, min_vehicles, max_vehicles, min_average_speed, max_average_speed, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.filter_records_by_vehicles_and_speed, min_vehicles=min_vehicles, 
                                                              max_vehicles=max_vehicles, min_average_speed=min_average_speed, 
                                                              max_average_speed=max_average_speed, city_name=city_name)
+        return records, summary, keys
+
+    def get_vehicles_filtered_by_timestamp_specific_street(self, min_timestamp, max_timestamp, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.vehicles_filtered_by_timestamp_specific_street, 
+                                                             min_timestamp=min_timestamp, max_timestamp=max_timestamp, city_name=city_name)
+        return records, summary, keys
+    
+    def get_average_speed_filtered_by_timestamp_specific_street(self, min_timestamp, max_timestamp, city_name):
+        records, summary, keys = self.__driver.execute_query(queries.average_speed_filtered_by_timestamp_specific_street, 
+                                                             min_timestamp=min_timestamp, max_timestamp=max_timestamp, city_name=city_name)
         return records, summary, keys
 
     def close(self):
