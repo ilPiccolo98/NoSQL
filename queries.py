@@ -40,3 +40,21 @@ average_speed_filtered_by_timestamp_specific_street = '''MATCH (city:CITY)
                                                          return r_detected.timestamp as timestamp, detection.average_speed as average_speed
                                                          order by r_detected.timestamp
                                                         '''
+
+timestamps_filtered_by_min_and_max_vehicles = '''MATCH (city:CITY)
+                                                 WHERE city.name = $city_name
+                                                 MATCH (city) -[r_has:HAS]-> (street:STREET)
+                                                 MATCH (street) -[r_detected:DETECTED]-> (detection:DETECTION)
+                                                 WHERE detection.vehicles >= $min_vehicles and detection.vehicles <= $max_vehicles
+                                                 return r_detected.timestamp as timestamp, detection.vehicles as vehicles
+                                                 order by r_detected.timestamp
+                                                '''
+
+timestamps_filtered_by_min_and_max_avg_speed = '''MATCH (city:CITY)
+                                                  WHERE city.name = $city_name
+                                                  MATCH (city) -[r_has:HAS]-> (street:STREET)
+                                                  MATCH (street) -[r_detected:DETECTED]-> (detection:DETECTION)
+                                                  WHERE detection.average_speed >= $min_average_speed and detection.average_speed <= $max_average_speed
+                                                  return r_detected.timestamp as timestamp, detection.average_speed as average_speed
+                                                  order by r_detected.timestamp
+                                                '''
