@@ -14,10 +14,11 @@ class Traffic_map:
         self.__geoData["Average speed"] = avg_speed
 
     def show(self):
-        colormap_dept = cm.StepColormap(colors=['#00ae53', '#ffe6a4', '#ee0028'],
-                                                vmin = 0,
-                                                vmax = 100,
-                                                index=[0, 20, 50, 100])
+        colormap_dept = cm.StepColormap(colors=['#00ae53', '#86dc76', '#daf8aa', 
+                                                '#ffe6a4', '#ff9a61', '#ee0028'],
+                                        vmin = 0,
+                                        vmax = 200,
+                                        index=[0, 20, 50, 80, 110, 150, 180])
         polygons = self.__geoData
         m = folium.Map([50.85045, 4.34878], zoom_start= 9, tiles='cartodbpositron')
         style_function = lambda x: { 'fillColor': colormap_dept(x['properties']['Vehicles']),
