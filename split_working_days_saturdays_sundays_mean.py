@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 mongodb_driver = Detections("mongodb://localhost:27017")
-items = list(mongodb_driver.get_all_detections_group_by_timestamp_avg_vehicles(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
+items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
 data_frame = pd.DataFrame.from_records(items)
 
 
@@ -17,19 +17,19 @@ data_frame_working_ = data_frame[data_frame['DayOfWeek'] < 5]
 data_frame_saturday_ = data_frame[data_frame['DayOfWeek'] == 5]
 data_frame_sunday_ = data_frame[data_frame['DayOfWeek'] == 6]
 
-sns.distplot(data_frame['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame['vehicles_avg'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-sns.distplot(data_frame_working_['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_working_['vehicles_avg'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-sns.distplot(data_frame_saturday_['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_saturday_['vehicles_avg'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
-sns.distplot(data_frame_sunday_['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_sunday_['vehicles_avg'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
@@ -51,13 +51,13 @@ data_frame_working_night_2 = data_frame_working_[data_frame_working_['time'].bet
 
 data_frame_working_night = pd.concat([data_frame_working_night_1, data_frame_working_night_2], axis=0)
 
-sns.distplot(data_frame_working_day['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_working_day['vehicles_avg'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
 
 
-sns.distplot(data_frame_working_night['vehicles'], hist=False, kde=True, 
+sns.distplot(data_frame_working_night['vehicles_avg'], hist=False, kde=True, 
              bins= 200, color = 'blue',
              hist_kws={'edgecolor':'black'})
 plt.show()
