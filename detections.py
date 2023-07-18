@@ -34,7 +34,7 @@ class Detections:
     
     def get_detections_by_timestamp(self, timestamp, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({ "timestamp": { "$ne" : "" }, "timestamp": timestamp }, {'_id': False})
+        return collections.find({ "timestamp": timestamp }, {'_id': False})
 
     def close(self):
         self.__client.close()
