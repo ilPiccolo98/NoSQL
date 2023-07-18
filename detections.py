@@ -26,11 +26,11 @@ class Detections:
     
     def get_all_detections_group_by_timestamp_sum_and_avg_vehicles(self, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.aggregate([ { "$project": { "_id": 0, "average_speed": 0, "id_street": 0 } }, { "$match": { "timestamp": { "$exists": True, "$ne": ""} } }, { "$group": { "_id": "$timestamp", "vehicles_avg": { "$avg": "$vehicles" }, "vehicles_sum": {"$sum": "$vehicles"} } }, { "$sort": { "_id": 1 } } ])
+        return collections.aggregate([ { "$group": { "_id": "$timestamp", "vehicles_avg": { "$avg": "$vehicles" }, "vehicles_sum": {"$sum": "$vehicles"} } }, { "$sort": { "_id": 1 } }, { "$match": { "_id": { "$ne": "" } } } ])
 
     def get_detections_by_id_street(self, id_street, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))
-        return collections.find({ "id_street": id_street, "timestamp": { "$ne" : "" } }, {'_id': False})
+        return collections.find({ "id_street": id_street }, {'_id': False})
     
     def get_detections_by_timestamp(self, timestamp, city, granularity, range):
         collections = self.__db.get_collection("{city}_{granularity}_{range}".format(city=city, granularity=granularity, range=range))

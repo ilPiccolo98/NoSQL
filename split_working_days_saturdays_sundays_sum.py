@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 mongodb_driver = Detections("mongodb://localhost:27017")
-items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(constants.anderlecht, constants.granularity_05min, constants.range_01_03_2019))
+items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(constants.belgium, constants.granularity_15min, constants.range_01_03_2019))
 data_frame = pd.DataFrame.from_records(items)
 
 
