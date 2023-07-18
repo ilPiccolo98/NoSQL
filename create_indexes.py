@@ -1,16 +1,26 @@
-import glob
-import subprocess
 from pymongo import MongoClient
+from pymongo import IndexModel
+import threading
 
-mongotool = input("Inserire la stringa di connessione di mongoDB: ")
-client = mo
+def create_indexes_thread(collection, collection_name):
+    print("Creating index for: ", collection_name)
+    collection.create_index("timestamp")
+    collection.create_index("id_street")
+    print("Index created for: ", collection_name)
 
+string_connection = input("Inserire la stringa di connessione di mongoDB: ")
+client = MongoClient(string_connection)
+db = client["detections"]
 
-for file in files:
-    commands = [mongotool + "\\mongoimport", "--type", "csv",
-                "--fields", "timestamp,id_street,vehicles,average_speed",
-                "--db", mydatabase,
-                "--collection", file[:-4],
-                "--file", dir_path + "\\" + file,
-                "--numInsertionWorkers", "4"]
-    subprocess.Popen(commands, shell=True)
+threads = []
+
+for collection_name in db.list_collection_names():
+    collection = db.get_collection(collection_name)
+    threads.append(threading.Thread(target=create_indexes_thread, args=(collection, collection_name)))
+
+for thread in threads:
+    thread.start()
+
+for thread in threads:
+    thread.join()
+
