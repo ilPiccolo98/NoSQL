@@ -19,9 +19,12 @@ list_of_records = []
 for record in records:
     list_of_records.append(record.data())
 
-data_frame = pd.DataFrame.from_records(list_of_records).set_index(["timestamp"])
-data_frame.plot(figsize=(20,5), color = 'red', rot=45, title='Anderlecht', kind="line")
-plt.show()
+if len(list_of_records) != 0:
+    data_frame = pd.DataFrame.from_records(list_of_records).set_index(["timestamp"])
+    data_frame.plot(figsize=(20,5), color = 'red', rot=45, title='Anderlecht', kind="line")
+    plt.show()
+else:
+    print("No item to plot")
 
 records, summary, keys = graph_detections.get_average_speed_filtered_by_timestamp_specific_street(min_timestamp, max_timestamp, "Anderlecht")
 
@@ -29,9 +32,12 @@ list_of_records = []
 for record in records:
     list_of_records.append(record.data())
 
-data_frame = pd.DataFrame.from_records(list_of_records).set_index(["timestamp"])
-data_frame.plot(figsize=(20,5), color = 'red', rot=45, title='Anderlecht', kind="line")
-plt.show()
+if len(list_of_records) != 0:
+    data_frame = pd.DataFrame.from_records(list_of_records).set_index(["timestamp"])
+    data_frame.plot(figsize=(20,5), color = 'red', rot=45, title='Anderlecht', kind="line")
+    plt.show()
+else:
+    print("No item to plot")
 
 graph_detections.close()
 mongodb_driver.close()

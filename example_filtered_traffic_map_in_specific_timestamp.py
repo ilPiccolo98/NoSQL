@@ -17,8 +17,11 @@ list_of_records = []
 for record in records:
     list_of_records.append(record.data())
 
-traffic_map = Traffic_map(geoJson, list_of_records, timestamp)
-traffic_map.show()
+if len(list_of_records) != 0:
+    traffic_map = Traffic_map(geoJson, list_of_records, timestamp)
+    traffic_map.show()
+else:
+    print("No item to plot")
 
 mongodb_driver.close()
 graph_detections.close()

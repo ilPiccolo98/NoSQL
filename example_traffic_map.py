@@ -16,7 +16,10 @@ items = mongodb_driver.get_detections_by_timestamp(timestamp, constants.anderlec
 list_of_items = list(items)
 graph_detections.remove_old_graph()
 graph_detections.execute_graph_creation(list_of_items, "Anderlecht")
-traffic_map = Traffic_map(geoJson, list_of_items, timestamp)
+if len(list_of_items) != 0:
+    traffic_map = Traffic_map(geoJson, list_of_items, timestamp)
+else:
+    print("No item to plot")
 traffic_map.show()
 mongodb_driver.close()
 graph_detections.close()
