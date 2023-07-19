@@ -31,7 +31,7 @@ class Traffic_map:
                                                                             sticky=False)).add_to(m)
         colormap_dept.caption = 'Traffic Flow - Timestamp: %s' % self.__timestamp
         colormap_dept.add_to(m)
-        m.show_in_browser()
+        return m
     
     def _get_list_of_properties(self, items):
         id_streets = []
