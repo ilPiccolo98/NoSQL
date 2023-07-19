@@ -3,20 +3,20 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-def init_functions_split_working_days_saturdays_sundays_mean(mongodb_driver, rete_stradale, risoluzione_temporale,
-                                                             periodo_tempo):
-    items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(rete_stradale, risoluzione_temporale,
-                                                                                   periodo_tempo))
-    data_frame = pd.DataFrame.from_records(items)
+def init_functions_split_working_days_saturdays_sundays_mean(items):
+    if len(items) != 0:
+        data_frame = pd.DataFrame.from_records(items)
 
-    data_frame['time'] = pd.to_datetime(data_frame['_id']).dt.time
-    data_frame['DayOfWeek'] = pd.to_datetime(data_frame['_id']).dt.dayofweek
+        data_frame['time'] = pd.to_datetime(data_frame['_id']).dt.time
+        data_frame['DayOfWeek'] = pd.to_datetime(data_frame['_id']).dt.dayofweek
 
-    data_frame_working_ = data_frame[data_frame['DayOfWeek'] < 5]
-    data_frame_saturday_ = data_frame[data_frame['DayOfWeek'] == 5]
-    data_frame_sunday_ = data_frame[data_frame['DayOfWeek'] == 6]
+        data_frame_working_ = data_frame[data_frame['DayOfWeek'] < 5]
+        data_frame_saturday_ = data_frame[data_frame['DayOfWeek'] == 5]
+        data_frame_sunday_ = data_frame[data_frame['DayOfWeek'] == 6]
 
-    return data_frame, data_frame_working_, data_frame_saturday_, data_frame_sunday_
+        return data_frame, data_frame_working_, data_frame_saturday_, data_frame_sunday_
+    else:
+        print("No item to plot")
 
 
 # Count trucks: split working days, saturdays and sundays

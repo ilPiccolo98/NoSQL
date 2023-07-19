@@ -9,9 +9,7 @@ from traffic_map import Traffic_map
 
 
 # Traffico del dataset selezionato rappresentato come somma dei veicoli per ciascuna strada
-def traffic_sum_vehicles_for_street(mongodb_driver, rete_stradale, risoluzione_temporale, periodo_tempo):
-    items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(rete_stradale, risoluzione_temporale, periodo_tempo))
-
+def traffic_sum_vehicles_for_street(items, rete_stradale):
     if len(items) != 0:
         data_frame = pd.DataFrame.from_records(items).set_index(["_id"])
         if rete_stradale == constants.anderlecht:
@@ -27,9 +25,7 @@ def traffic_sum_vehicles_for_street(mongodb_driver, rete_stradale, risoluzione_t
 
 
 # Traffico del dataset selezionato rappresentato come media dei veicoli per ciascuna strada
-def traffic_avg_vehicles_for_street(mongodb_driver, rete_stradale, risoluzione_temporale, periodo_tempo):
-    items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(rete_stradale, risoluzione_temporale, periodo_tempo))
-
+def traffic_avg_vehicles_for_street(items, rete_stradale):
     if len(items) != 0:
         data_frame = pd.DataFrame.from_records(items).set_index(["_id"])
         if rete_stradale == constants.anderlecht:
@@ -84,7 +80,6 @@ def traffic_city_at_specific_time(mongodb_driver, graph_detections, rete_stradal
     minuti = input("Minuti (da 00 a 55. Nota: devono essere multipli di " + risoluzione_temporale + "):")
     secondi = "00"
     timestamp = anno + "-" + mese + "-" + giorno + " " + ora + ":" + minuti + ":" + secondi
-    print("TIMESTAMP : ", timestamp)
 
     items = mongodb_driver.get_detections_by_timestamp(timestamp, rete_stradale, risoluzione_temporale, periodo_tempo)
     list_of_items = list(items)
@@ -126,7 +121,6 @@ def traffic_city_at_specific_time_filter_by_number_vehicles_avg_speed(mongodb_dr
     minuti = input("Minuti (da 00 a 55. Nota: devono essere multipli di " + risoluzione_temporale + "):")
     secondi = "00"
     timestamp = anno + "-" + mese + "-" + giorno + " " + ora + ":" + minuti + ":" + secondi
-    print("TIMESTAMP : ", timestamp)
 
     items = mongodb_driver.get_detections_by_timestamp(timestamp, rete_stradale, risoluzione_temporale, periodo_tempo)
     graph_detections.remove_old_graph()
@@ -164,55 +158,29 @@ def traffic_avg_speed_street_at_specific_timerange(mongodb_driver, graph_detecti
 
     id_street = int(input("Inserisci l'id della strada"))
 
-    # Valori di default
-    min_timestamp = "2019-01-01 01:00:00"
-    max_timestamp = "2019-02-10 01:00:00"
-    city = "Anderlecht"
+    anno_min = input("Inserisci un istante di tempo nel seguente formato AAAA-MM-GG ORA:MIN:\n"
+                 "Nota. Valori possibili per Anno: " + periodo_tempo[10:] + "\n"
+                                                                            "Anno AAAA:")
+    mese_min = input("Nota. Valori possibili per Mese: da " + periodo_tempo[2:4] + " a " + periodo_tempo[7:9] + "\n"
+                                                                                                            "Mese MM:")
+    giorno_min = input("Giorno GG:")
+    ora_min = input("Ora 24H (da 00 a 23):")
+    minuti_min = input("Minuti (da 00 a 55. Nota: devono essere multipli di " + risoluzione_temporale + "):")
+    secondi = "00"
+    min_timestamp = anno_min + "-" + mese_min + "-" + giorno_min + " " + ora_min + ":" + minuti_min + ":" + secondi
+    print("MIN TIMESTAMP: ", min_timestamp)
 
-    input_valido = False
-    while not input_valido:
-        anno_min = input("Inserisci un istante di tempo nel seguente formato AAAA-MM-GG ORA:MIN:\n"
-                     "Nota. Valori possibili per Anno: " + periodo_tempo[10:] + "\n"
-                                                                                "Anno AAAA:")
-        mese_min = input("Nota. Valori possibili per Mese: da " + periodo_tempo[2:4] + " a " + periodo_tempo[7:9] + "\n"
-                                                                                                                "Mese MM:")
-        giorno_min = input("Giorno GG:")
-        ora_min = input("Ora 24H (da 00 a 23):")
-        minuti_min = input("Minuti (da 00 a 55. Nota: devono essere multipli di " + risoluzione_temporale + "):")
-        secondi = "00"
-        min_timestamp = anno_min + "-" + mese_min + "-" + giorno_min + " " + ora_min + ":" + minuti_min + ":" + secondi
-        print("TIMESTAMP : ", min_timestamp)
-
-
-        anno_max = input("Inserisci un istante di tempo nel seguente formato AAAA-MM-GG ORA:MIN:\n"
-                     "Nota. Valori possibili per Anno: " + periodo_tempo[10:] + "\n"
-                                                                                "Anno AAAA:")
-        mese_max = input("Nota. Valori possibili per Mese: da " + periodo_tempo[2:4] + " a " + periodo_tempo[7:9] + "\n"
-                                                                                                                "Mese MM:")
-        giorno_max = input("Giorno GG:")
-        ora_max = input("Ora 24H (da 00 a 23):")
-        minuti_max = input("Minuti (da 00 a 55. Nota: devono essere multipli di " + risoluzione_temporale + "):")
-        secondi = "00"
-        max_timestamp = anno_max + "-" + mese_max + "-" + giorno_max + " " + ora_max + ":" + minuti_max + ":" + secondi
-        print("TIMESTAMP : ", max_timestamp)
-
-        # Controllo che min_timestamp < max_timestamp
-        if anno_min < anno_max:
-            input_valido = True
-        elif anno_min == anno_max:
-            if mese_min < mese_max:
-                input_valido = True
-            elif mese_min == mese_max:
-                if giorno_min < giorno_max:
-                    input_valido = True
-                elif giorno_min == giorno_max:
-                    if ora_min < ora_max:
-                        input_valido = True
-                    elif ora_min == ora_max:
-                        if minuti_min < minuti_max:
-                            input_valido = True
-                        else:
-                            input_valido = False
+    anno_max = input("Inserisci un istante di tempo nel seguente formato AAAA-MM-GG ORA:MIN:\n"
+                 "Nota. Valori possibili per Anno: " + periodo_tempo[10:] + "\n"
+                                                                            "Anno AAAA:")
+    mese_max = input("Nota. Valori possibili per Mese: da " + periodo_tempo[2:4] + " a " + periodo_tempo[7:9] + "\n"
+                                                                                                            "Mese MM:")
+    giorno_max = input("Giorno GG:")
+    ora_max = input("Ora 24H (da 00 a 23):")
+    minuti_max = input("Minuti (da 00 a 55. Nota: devono essere multipli di " + risoluzione_temporale + "):")
+    secondi = "00"
+    max_timestamp = anno_max + "-" + mese_max + "-" + giorno_max + " " + ora_max + ":" + minuti_max + ":" + secondi
+    print("MAX TIMESTAMP: ", max_timestamp)
 
     items = mongodb_driver.get_detections_by_id_street(id_street, rete_stradale, risoluzione_temporale, periodo_tempo)
     graph_detections.remove_old_graph()

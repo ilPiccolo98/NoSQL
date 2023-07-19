@@ -3,12 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-from detections import Detections
-
-
-def init_functions_split_working_days_saturdays_sundays_sum(mongodb_driver, rete_stradale, risoluzione_temporale, periodo_tempo):
-
-    items = list(mongodb_driver.get_all_detections_group_by_timestamp_sum_and_avg_vehicles(rete_stradale, risoluzione_temporale, periodo_tempo))
+def init_functions_split_working_days_saturdays_sundays_sum(items):
     if len(items) != 0:
         data_frame = pd.DataFrame.from_records(items)
 
