@@ -94,11 +94,10 @@ def traffic_city_at_specific_time(mongodb_driver, graph_detections, rete_stradal
 
     if len(list_of_items) != 0:
         traffic_map = Traffic_map(geoJson, list_of_items, timestamp)
+        m = traffic_map.show()
+        return m
     else:
         print("No item to plot")
-
-    m = traffic_map.show()
-    return m
 
 
 # Traffico delle strade ad un istante di tempo, filtrando anche per numero di veicoli e per la velocita' media
@@ -135,12 +134,12 @@ def traffic_city_at_specific_time_filter_by_number_vehicles_avg_speed(mongodb_dr
         graph_detections.execute_graph_creation(items, "Belgium")
         city = "Belgium"
 
-    min_speed = int(input("Inserisci i seguenti valori:"
-                          "+ Velocita' minima:"))
-    max_speed = int(input("+ Velocita' massima:"))
-    min_mean_speed = int(input("+ Velocita' media minima:"))
-    max_mean_speed = int(input("+ Velocita' media massima:"))
-    records, summary, keys = graph_detections.filter_records_by_vehicles_and_speed(min_speed, max_speed, min_mean_speed, max_mean_speed, city)
+    min_vehicles = int(input("Inserisci i seguenti valori:"
+                          "+ Numero minimo di veicoli:"))
+    max_vehicles = int(input("+ Numero massimo di veicoli:"))
+    min_average_speed = int(input("+ Velocita' media minima:"))
+    max_average_speed = int(input("+ Velocita' media massima:"))
+    records, summary, keys = graph_detections.filter_records_by_vehicles_and_speed(min_vehicles, max_vehicles, min_average_speed, max_average_speed, city)
     list_of_records = []
     for record in records:
         list_of_records.append(record.data())
